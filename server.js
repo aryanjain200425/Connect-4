@@ -31,4 +31,16 @@ io.on('connection', (socket) => {
         socket.emit('player-joined', 'spectator', players.length );
     }
 
+
+
+    socket.on('disconnect', () =>{
+        console.log('A user disconnected: ', socket.id);
+
+        let index = players.indexOf(socket.id);
+
+        players.splice(index, 1);
+
+
+    });
+
 });
