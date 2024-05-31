@@ -39,3 +39,7 @@ h1 {
 .yellow {
     background-color: yellow;
 }
+
+#currentPlayer{
+    margin-top: 30px;
+}
