@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const colorMessage = document.getElementById('color');
     const currentPlayerMessage = document.getElementById('currentPlayer');
+    const resetButton = document.getElementById('reset');
 
 
     const rows = 6;
@@ -65,7 +66,29 @@ document.addEventListener('DOMContentLoaded', () => {
             cc -= dc;
         }
         return count >= 4;
+    }   
+
+    function resetGame(){
+        for(let r = 0; r < rows; r++){
+            for(let c = 0; c < columns; c++){
+                board[r][c].classList.remove('red', 'yellow');
+                board[r][c].classList.add('empty');
+            }
+        }
     }
+
+
+    function handleResetButton(){
+        socket.emit('reset-game');
+    }
+
+
+    socket.on("resetting-the-game", () =>{
+        resetGame();
+        gameIsOver = false;
+        currentPlayer = 'red';
+        currentPlayerMessage.innerText = `Current Player: ${currentPlayer}`;
+    });
 
 
     socket.on('update-board', (r, c)=>{
@@ -117,6 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('player-joined', (color, numPlayer) =>{
         creatingPlayer(color, numPlayer);
     });
+
+    resetButton.addEventListener('click', handleResetButton);
 
 
     createBoard();

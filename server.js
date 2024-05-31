@@ -40,6 +40,11 @@ io.on('connection', (socket) => {
     });
 
 
+    socket.on('reset-game', ()=>{
+        io.emit('resetting-the-game');
+    });
+
+
     socket.on('disconnect', () =>{
         console.log('A user disconnected: ', socket.id);
 
@@ -49,5 +54,7 @@ io.on('connection', (socket) => {
 
 
     });
+
+
 
 });
