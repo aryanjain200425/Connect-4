@@ -22,9 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleClick(event) {
-
+        const column = event.target.dataset.column;
+        for (let r = rows - 1; r >= 0; r--) {
+            if (board[r][column].classList.contains('empty')) {
+                board[r][column].classList.remove('empty');
+                board[r][column].classList.add(currentPlayer);
+                currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+                break;
+            }
+        }
     }
-
 
 
     createBoard();
