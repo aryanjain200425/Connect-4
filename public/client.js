@@ -30,12 +30,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function checkWinner(){
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < columns; c++) {
+                if (board[r][c].classList.contains(currentPlayer)) {
+                    if (checkDirection(r, c, 1, 0) ||
+                        checkDirection(r, c, 1, 1) ||
+                        checkDirection(r, c, 0, 1) ||
+                        checkDirection(r, c, 1, -1)) {
+                        gameIsOver = true;
+                        currentPlayerMessage.innerText = `${currentPlayer} wins!`;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+
+    function checkDirection(r, c, dr, dc) {
+        let count = 1;
+        let rr = r + dr;
+        let cc = c + dc;
+        while (rr >= 0 && rr < rows && cc >= 0 && cc < columns && board[rr][cc].classList.contains(currentPlayer)) {
+            count++;
+            rr += dr;
+            cc += dc;
+        }
+        rr = r - dr;
+        cc = c - dc;
+        while (rr >= 0 && rr < rows && cc >= 0 && cc < columns && board[rr][cc].classList.contains(currentPlayer)) {
+            count++;
+            rr -= dr;
+            cc -= dc;
+        }
+        return count >= 4;
+    }
+
 
     socket.on('update-board', (r, c)=>{
         board[r][c].classList.remove('empty');
         board[r][c].classList.add(currentPlayer);
-        currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
-        currentPlayerMessage.innerText = `Current Player: ${currentPlayer}`;
+        checkWinner();
+
+        if(!gameIsOver){
+            currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+            currentPlayerMessage.innerText = `Current Player: ${currentPlayer}`;
+        }
+        
     });
 
     function handleClick(event) {
