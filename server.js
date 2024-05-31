@@ -35,6 +35,10 @@ io.on('connection', (socket) => {
         io.emit('update-board', r, c);
     });
 
+    socket.on('start-game', ()=>{
+        io.emit('starting-the-game');
+    });
+
 
     socket.on('disconnect', () =>{
         console.log('A user disconnected: ', socket.id);

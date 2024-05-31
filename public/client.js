@@ -3,13 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const socket = io();
 
     const colorMessage = document.getElementById('color');
+    const currentPlayerMessage = document.getElementById('currentPlayer');
 
 
     const rows = 6;
     const columns = 7;
     const board = [];
     let currentPlayer = 'red';
-    let gameIsOver = false;
+    let gameIsOver = true;
     let myColor = '';
 
     function createBoard() {
@@ -34,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         board[r][c].classList.remove('empty');
         board[r][c].classList.add(currentPlayer);
         currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+        currentPlayerMessage.innerText = `Current Player: ${currentPlayer}`;
     });
 
     function handleClick(event) {
@@ -55,7 +57,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function creatingPlayer(color, numPlayers){
         myColor = color;
         colorMessage.innerText = `You are ${color}`;
+
+        if(numPlayers === 1){
+            currentPlayerMessage.innerText = 'Waiting for opponent...';
+        }
+        else{
+            socket.emit('start-game');
+        }
     }
+
+
+    socket.on('starting-the-game', ()=>{
+        currentPlayerMessage.innerText = 'Current Player: red';
+        gameIsOver = false;
+    });
 
     socket.on('player-joined', (color, numPlayer) =>{
         creatingPlayer(color, numPlayer);
