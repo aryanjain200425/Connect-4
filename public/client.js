@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }   
 
     function resetGame(){
+        currentPlayer = 'red';
         for(let r = 0; r < rows; r++){
             for(let c = 0; c < columns; c++){
                 board[r][c].classList.remove('red', 'yellow');
@@ -81,6 +82,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleResetButton(){
         socket.emit('reset-game');
     }
+
+    socket.on('player-left',(color, numPlayers)=>{
+        resetGame();
+
+        myColor = color;
+        colorMessage.innerText = `You are ${color}`;
+
+        if(numPlayers === 1){
+            currentPlayerMessage.innerText = 'Waiting for opponent...';
+            gameIsOver = true;
+        }
+        else{
+            socket.emit('start-game');
+        }
+    });
 
 
     socket.on("resetting-the-game", () =>{
@@ -133,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     socket.on('starting-the-game', ()=>{
-        currentPlayerMessage.innerText = 'Current Player: red';
+        currentPlayerMessage.innerText = `Current Player: ${currentPlayer}`;
         gameIsOver = false;
     });
 

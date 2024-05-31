@@ -52,6 +52,19 @@ io.on('connection', (socket) => {
 
         players.splice(index, 1);
 
+        if(index === 0){
+            io.to(players[0]).emit('player-left', 'red', players.length);
+            if(players.length > 1){
+                io.to(players[1]).emit('player-left', 'yellow', players.length);
+            }
+        }
+        else if(index === 1){
+            io.to(players[0]).emit('player-left', 'red', players.length);
+            if(players.length > 1){
+                io.to(players[1]).emit('player-left', 'yellow', players.length);
+            }
+        }
+
 
     });
 
