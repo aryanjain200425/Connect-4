@@ -29,6 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+
+    socket.on('update-board', (r, c)=>{
+        board[r][c].classList.remove('empty');
+        board[r][c].classList.add(currentPlayer);
+        currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+    });
+
     function handleClick(event) {
 
         if (gameIsOver || currentPlayer !== myColor ) {
@@ -39,9 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const column = event.target.dataset.column;
         for (let r = rows - 1; r >= 0; r--) {
             if (board[r][column].classList.contains('empty')) {
-                board[r][column].classList.remove('empty');
-                board[r][column].classList.add(currentPlayer);
-                currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+                socket.emit('move', r, column);
                 break;
             }
         }

@@ -31,6 +31,9 @@ io.on('connection', (socket) => {
         socket.emit('player-joined', 'spectator', players.length );
     }
 
+    socket.on('move', (r, c) => {
+        io.emit('update-board', r, c);
+    });
 
 
     socket.on('disconnect', () =>{
