@@ -65,6 +65,8 @@ io.on('connection', (socket) => {
             }
         }
 
+        io.emit('resetting-the-game');
+
 
     });
 

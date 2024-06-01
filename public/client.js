@@ -149,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     socket.on('starting-the-game', ()=>{
+        currentPlayer = 'red';
         currentPlayerMessage.innerText = `Current Player: ${currentPlayer}`;
         gameIsOver = false;
     });
