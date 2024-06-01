@@ -160,6 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    socket.on('draw-board', (color, row, column) =>{
+        board[row][column].classList.remove('empty');
+        board[row][column].classList.add(color);
+    });
+
+
     socket.on('starting-the-game', (myC, currentP)=>{
 
         if(myColor === 'spectator'){

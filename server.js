@@ -1,4 +1,5 @@
 const express = require('express');
+const { read } = require('fs');
 const http = require('http');
 const socketIo = require('socket.io');
 
@@ -16,6 +17,8 @@ let players = new Array();
 
 let currentPlayer = 'red';
 
+let history = [];
+
 io.on('connection', (socket) => {
 
 
@@ -29,9 +32,13 @@ io.on('connection', (socket) => {
     }
     else{
         socket.emit('player-joined', 'spectator', players.length );
+        history.forEach(element => {
+            socket.emit('draw-board', element.color, element.row, element.column);
+        });
     }
 
     socket.on('move', (r, c) => {
+        history.push({color: currentPlayer, row: r, column: c});
         currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
         io.emit('update-board', r, c);
     });
@@ -43,6 +50,8 @@ io.on('connection', (socket) => {
 
     socket.on('reset-game', ()=>{
         io.emit('resetting-the-game');
+        history = [];
+        currentPlayer = 'red';
     });
 
 
@@ -51,6 +60,10 @@ io.on('connection', (socket) => {
         let index = players.indexOf(socket.id);
 
         players.splice(index, 1);
+
+        history = [];
+
+        currentPlayer = 'red'
 
         if(index === 0){
             io.to(players[0]).emit('player-left', 'red', players.length);
