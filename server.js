@@ -14,6 +14,7 @@ server.listen(port, () => console.log(`Server is running on port ${port}`));
 
 let players = new Array();
 
+let currentPlayer = 'red';
 
 io.on('connection', (socket) => {
 
@@ -31,11 +32,12 @@ io.on('connection', (socket) => {
     }
 
     socket.on('move', (r, c) => {
+        currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
         io.emit('update-board', r, c);
     });
 
-    socket.on('start-game', ()=>{
-        io.emit('starting-the-game');
+    socket.on('start-game', (myColor)=>{
+        io.emit('starting-the-game', myColor, currentPlayer);
     });
 
 

@@ -153,16 +153,22 @@ document.addEventListener('DOMContentLoaded', () => {
             currentPlayerMessage.innerText = 'Waiting for opponent...';
         }
         else{
-            socket.emit('start-game');
+            socket.emit('start-game', myColor);
         }
 
         
     }
 
 
-    socket.on('starting-the-game', ()=>{
-        currentPlayer = 'red';
-        currentPlayerMessage.innerText = `Current Player: ${currentPlayer}`;
+    socket.on('starting-the-game', (myC, currentP)=>{
+
+        if(myColor === 'spectator'){
+            currentPlayerMessage.innerText = `Current Player: ${currentP}`;
+        }
+        else{
+            currentPlayerMessage.innerText = `Current Player: ${currentPlayer}`;
+        }
+        
         gameIsOver = false;
         displayResetButton();
     });
