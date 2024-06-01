@@ -164,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(myColor === 'spectator'){
             currentPlayerMessage.innerText = `Current Player: ${currentP}`;
+            currentPlayer = currentP;
         }
         else{
             currentPlayerMessage.innerText = `Current Player: ${currentPlayer}`;
