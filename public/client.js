@@ -135,6 +135,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function displayResetButton(){
+        if(myColor === 'spectator'){
+            resetButton.style.display = 'none';
+        }
+        else{
+            resetButton.style.display = 'block';
+        }
+        
+    }
+
     function creatingPlayer(color, numPlayers){
         myColor = color;
         colorMessage.innerText = `You are ${color}`;
@@ -145,6 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
         else{
             socket.emit('start-game');
         }
+
+        
     }
 
 
@@ -152,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPlayer = 'red';
         currentPlayerMessage.innerText = `Current Player: ${currentPlayer}`;
         gameIsOver = false;
+        displayResetButton();
     });
 
     socket.on('player-joined', (color, numPlayer) =>{
